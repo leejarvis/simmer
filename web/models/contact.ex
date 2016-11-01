@@ -1,6 +1,8 @@
 defmodule Simmer.Contact do
   use Simmer.Web, :model
 
+  @derive {Phoenix.Param, key: :email}
+
   schema "contacts" do
     field :email,       :string
     field :first_name,  :string
@@ -16,9 +18,5 @@ defmodule Simmer.Contact do
     struct
     |> cast(params, @required_params ++ @optional_params)
     |> validate_required(@required_params)
-  end
-
-  defimpl Phoenix.Param do
-    def to_param(%{email: email}), do: email
   end
 end

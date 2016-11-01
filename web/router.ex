@@ -8,6 +8,6 @@ defmodule Simmer.Router do
   scope "/api", Simmer do
     pipe_through :api
 
-    resources "/contacts", ContactController
+    resources "/contacts", ContactController, param: "email"
   end
 end

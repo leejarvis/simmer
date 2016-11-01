@@ -18,4 +18,9 @@ defmodule Simmer.ContactController do
         |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
     end
   end
+
+  def delete(conn, %{"email" => email}) do
+    Repo.get_by!(Contact, email: email)
+    send_resp(conn, :no_content, "")
+  end
 end

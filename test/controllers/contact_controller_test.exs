@@ -28,4 +28,10 @@ defmodule Simmer.ContactControllerTest do
     end
   end
 
+  test "DELETE /contacts/:email", %{conn: conn} do
+    contact = Fixtures.create(:contact)
+    conn    = delete(conn, contact_path(conn, :delete, contact.email))
+
+    assert response(conn, :no_content)
+  end
 end

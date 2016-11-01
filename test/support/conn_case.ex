@@ -27,6 +27,8 @@ defmodule Simmer.ConnCase do
 
       import Simmer.Router.Helpers
 
+      alias Simmer.Fixtures
+
       # The default endpoint for testing
       @endpoint Simmer.Endpoint
     end
