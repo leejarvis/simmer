@@ -24,6 +24,20 @@ defmodule Simmer.ContactController do
     end
   end
 
+  def update(conn, %{"email" => email, "contact" => contact_params}) do
+    contact = Repo.get_by!(Contact, email: email)
+    changeset = Contact.changeset(contact, contact_params)
+
+    case Repo.update(changeset) do
+      {:ok, contact} ->
+        render(conn, "contact.json", contact: contact)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
   def delete(conn, %{"email" => email}) do
     Repo.get_by!(Contact, email: email)
     send_resp(conn, :no_content, "")

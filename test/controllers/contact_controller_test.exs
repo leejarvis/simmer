@@ -1,6 +1,8 @@
 defmodule Simmer.ContactControllerTest do
   use Simmer.ConnCase
 
+  alias Simmer.Contact
+
   @email "lee@jarvo.io"
 
   @params %{
@@ -36,6 +38,15 @@ defmodule Simmer.ContactControllerTest do
         "errors" => %{"email" => ["can't be blank"]}
       }
     end
+  end
+
+  test "PUT /contacts/:email", %{conn: conn} do
+    contact = Fixtures.create(:contact)
+    conn    = put(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
+
+    assert json_response(conn, 200) == put_in(@params, ["contact", "first_name"], "John")
+
+    assert "John" == Repo.get!(Contact, contact.id).first_name
   end
 
   test "DELETE /contacts/:email", %{conn: conn} do
