@@ -3,6 +3,11 @@ defmodule Simmer.ContactController do
 
   alias Simmer.Contact
 
+  def index(conn, _params) do
+    contacts = Repo.all(Contact)
+    render(conn, "contacts.json", contacts: contacts)
+  end
+
   def create(conn, %{"contact" => contact_params}) do
     changeset = Contact.changeset(%Contact{}, contact_params)
 

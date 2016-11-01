@@ -11,6 +11,16 @@ defmodule Simmer.ContactControllerTest do
     }
   }
 
+  test "GET /contacts", %{conn: conn} do
+    conn = get(conn, contact_path(conn, :index))
+    assert json_response(conn, 200) == %{"contacts" => []}
+
+    Fixtures.create(:contact)
+    conn = get(conn, contact_path(conn, :index))
+    %{"contacts" => contacts} = json_response(conn, 200)
+    assert Enum.count(contacts) == 1
+  end
+
   describe "POST /contacts" do
     test "valid payload", %{conn: conn} do
       conn = post(conn, contact_path(conn, :create, @params))
