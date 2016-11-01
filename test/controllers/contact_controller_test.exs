@@ -40,6 +40,12 @@ defmodule Simmer.ContactControllerTest do
     end
   end
 
+  test "GET /contacts/:email", %{conn: conn} do
+    contact = Fixtures.create(:contact)
+    conn    = get(conn, contact_path(conn, :show, contact))
+    assert json_response(conn, 200) == @params
+  end
+
   test "PUT /contacts/:email", %{conn: conn} do
     contact = Fixtures.create(:contact)
     conn    = put(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
