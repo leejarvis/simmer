@@ -54,5 +54,6 @@ defmodule Simmer.ContactControllerTest do
     conn    = delete(conn, contact_path(conn, :delete, contact.email))
 
     assert response(conn, :no_content)
+    assert nil == Repo.get(Contact, contact.id)
   end
 end

@@ -39,7 +39,7 @@ defmodule Simmer.ContactController do
   end
 
   def delete(conn, %{"email" => email}) do
-    Repo.get_by!(Contact, email: email)
+    Repo.get_by!(Contact, email: email) |> Repo.delete!
     send_resp(conn, :no_content, "")
   end
 end
