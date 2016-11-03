@@ -22,6 +22,8 @@ defmodule Simmer.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Simmer.ModelCase
+
+      alias Simmer.Fixtures
     end
   end
 

@@ -8,6 +8,8 @@ defmodule Simmer.Contact do
     field :first_name,  :string
     field :last_name,   :string
 
+    many_to_many :lists, Simmer.List, join_through: Simmer.Subscription
+
     timestamps()
   end
 
