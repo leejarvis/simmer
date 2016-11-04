@@ -12,9 +12,9 @@ defmodule Simmer.SubscriptionManagerTest do
     Manager.subscribe(contact, list)
     assert Manager.subscribed?(contact, list)
 
-    # test idempotence
+    # test idempotence and switching args
     Manager.subscribe(contact, list)
-    assert Manager.subscribed?(contact, list)
+    assert Manager.subscribed?(list, contact)
 
     Manager.unsubscribe(contact, list)
     refute Manager.subscribed?(contact, list)
