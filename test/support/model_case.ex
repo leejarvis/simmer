@@ -24,6 +24,7 @@ defmodule Simmer.ModelCase do
       import Simmer.ModelCase
 
       alias Simmer.Fixtures
+      alias Simmer.SubscriptionManager
     end
   end
 
