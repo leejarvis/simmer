@@ -6,11 +6,9 @@ defmodule Simmer.ContactControllerTest do
   @email "lee@jarvo.io"
 
   @params %{
-    "contact" => %{
-      "email"      => @email,
-      "first_name" => "Lee",
-      "last_name"  => "Jarvis",
-    }
+    "email"      => @email,
+    "first_name" => "Lee",
+    "last_name"  => "Jarvis",
   }
 
   test "GET /contacts", %{conn: conn} do
@@ -25,9 +23,9 @@ defmodule Simmer.ContactControllerTest do
 
   describe "POST /contacts" do
     test "valid payload", %{conn: conn} do
-      conn = post(conn, contact_path(conn, :create, @params))
+      conn = post(conn, contact_path(conn, :create, %{"contact" => @params }))
 
-      assert json_response(conn, :created) == @params
+      assert json_response(conn, :created)
       assert get_resp_header(conn, "location") == [contact_path(conn, :show, @email)]
     end
 
@@ -41,17 +39,17 @@ defmodule Simmer.ContactControllerTest do
   end
 
   test "GET /contacts/:email", %{conn: conn} do
-    contact = Fixtures.create(:contact)
-    conn    = get(conn, contact_path(conn, :show, contact))
-    assert json_response(conn, 200) == @params
+    contact  = Fixtures.create(:contact)
+    conn     = get(conn, contact_path(conn, :show, contact))
+
+    assert json_response(conn, 200)["contact"]
   end
 
-  test "PUT /contacts/:email", %{conn: conn} do
+  test "PATCH /contacts/:email", %{conn: conn} do
     contact = Fixtures.create(:contact)
     conn    = put(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
 
-    assert json_response(conn, 200) == put_in(@params, ["contact", "first_name"], "John")
-
+    assert json_response(conn, 200)["first_name"] == "John"
     assert "John" == Repo.get!(Contact, contact.id).first_name
   end
 

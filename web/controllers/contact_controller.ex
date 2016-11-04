@@ -26,7 +26,7 @@ defmodule Simmer.ContactController do
 
   def show(conn, %{"email" => email}) do
     contact = Repo.get_by!(Contact, email: email)
-    render(conn, "contact.json", contact: contact)
+    render(conn, "show.json", contact: contact)
   end
 
   def update(conn, %{"email" => email, "contact" => contact_params}) do
