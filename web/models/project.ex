@@ -4,6 +4,7 @@ defmodule Simmer.Project do
   schema "projects" do
     field :name, :string
 
+    has_many :api_keys, Simmer.APIKey
     has_many :lists,    Simmer.List
     has_many :contacts, Simmer.Contact
 
