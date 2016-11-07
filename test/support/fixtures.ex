@@ -2,16 +2,32 @@ defmodule Simmer.Fixtures do
   alias Simmer.Repo
   alias Simmer.Contact
   alias Simmer.List
+  alias Simmer.Project
 
   def create(schema, params \\ %{})
 
   def create(:contact, params) do
-    contact_params = %{email: "lee@jarvo.io", first_name: "Lee", last_name: "Jarvis"}
-    Repo.insert! struct(Contact, Map.merge(contact_params, params))
+    insert!(Contact,
+      %{
+        project_id: create(:project).id,
+        email:      "lee@jarvo.io",
+        first_name: "Lee",
+        last_name:  "Jarvis"
+      },
+      params)
   end
 
   def create(:list, params) do
-    list_params = %{name: "Newsletter"}
-    Repo.insert! struct(List, Map.merge(list_params, params))
+    project = create(:project)
+    insert!(List, %{project_id: project.id, name: "Newsletter"}, params)
+  end
+
+  def create(:project, params) do
+    insert!(Project, %{name: "Mailer"}, params)
+  end
+
+  defp insert!(struct, default_params, params) do
+    attrs = Map.merge(default_params, params)
+    Repo.get_by(struct, attrs) || Repo.insert!(struct(struct, attrs))
   end
 end

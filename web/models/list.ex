@@ -4,6 +4,7 @@ defmodule Simmer.List do
   schema "lists" do
     field :name, :string
 
+    belongs_to :project, Simmer.Project
     many_to_many :contacts, Simmer.Contact, join_through: Simmer.Subscription
 
     timestamps()
