@@ -1,7 +1,7 @@
 defmodule Simmer.Endpoint do
   use Phoenix.Endpoint, otp_app: :simmer
 
-  socket "/socket", Simmer.UserSocket
+  # socket "/socket", Simmer.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
