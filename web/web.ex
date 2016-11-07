@@ -36,6 +36,8 @@ defmodule Simmer.Web do
 
       import Simmer.Router.Helpers
       import Simmer.Gettext
+
+      import Simmer.CurrentProject
     end
   end
 

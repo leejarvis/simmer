@@ -3,15 +3,12 @@ defmodule Simmer.ContactController do
 
   alias Simmer.Contact
 
-  # FIXME: scope SQL queries to projects
-
   def index(conn, _params) do
-    contacts = Repo.all(Contact)
-    render(conn, "contacts.json", contacts: contacts)
+    render(conn, "contacts.json", contacts: current_project(conn, :contacts))
   end
 
   def create(conn, %{"contact" => contact_params}) do
-    changeset = Contact.changeset(%Contact{}, conn.private.project, contact_params)
+    changeset = Contact.changeset(%Contact{}, current_project(conn), contact_params)
 
     case Repo.insert(changeset) do
       {:ok, contact} ->
@@ -27,13 +24,13 @@ defmodule Simmer.ContactController do
   end
 
   def show(conn, %{"email" => email}) do
-    contact = Repo.get_by!(Contact, email: email)
+    contact = get_by!(conn, Contact, email: email)
     render(conn, "show.json", contact: contact)
   end
 
   def update(conn, %{"email" => email, "contact" => contact_params}) do
-    contact = Repo.get_by!(Contact, email: email) |> Repo.preload(:project)
-    changeset = Contact.changeset(contact, conn.private.project, contact_params)
+    contact = get_by!(conn, Contact, email: email)
+    changeset = Contact.changeset(contact, current_project(conn), contact_params)
 
     case Repo.update(changeset) do
       {:ok, contact} ->
@@ -46,7 +43,7 @@ defmodule Simmer.ContactController do
   end
 
   def delete(conn, %{"email" => email}) do
-    Repo.get_by!(Contact, email: email) |> Repo.delete!
+    get_by!(conn, Contact, email: email) |> Repo.delete!
     send_resp(conn, :no_content, "")
   end
 end
