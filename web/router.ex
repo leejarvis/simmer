@@ -10,7 +10,8 @@ defmodule Simmer.Router do
   scope "/api", Simmer do
     pipe_through :api
 
+    resources "/api_keys", APIKeyController, only: [:index]
     resources "/contacts", ContactController, param: "email"
-    resources "/lists", ListController
+    resources "/lists",    ListController
   end
 end
