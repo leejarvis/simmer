@@ -2,8 +2,9 @@ defmodule Simmer.ListTest do
   use Simmer.ModelCase
 
   test "contacts" do
-    contact = Fixtures.create(:contact)
-    list    = Fixtures.create(:list)
+    project = Fixtures.project
+    contact = Fixtures.create(project, :contact)
+    list    = Fixtures.create(project, :list)
 
     SubscriptionManager.subscribe(contact, list)
 

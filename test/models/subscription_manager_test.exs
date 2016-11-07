@@ -4,8 +4,9 @@ defmodule Simmer.SubscriptionManagerTest do
   alias Simmer.SubscriptionManager, as: Manager
 
   test "subscriptions" do
-    list    = Fixtures.create(:list)
-    contact = Fixtures.create(:contact)
+    project = Fixtures.project()
+    list    = Fixtures.create(project, :list)
+    contact = Fixtures.create(project, :contact)
 
     refute Manager.subscribed?(contact, list)
 
