@@ -4,12 +4,12 @@ defmodule Simmer.Fixtures do
   alias Simmer.List
   alias Simmer.Project
 
-  def create(schema, params \\ %{})
+  def create(schema, project, params \\ %{})
 
-  def create(:contact, params) do
+  def create(project, :contact, params) do
     insert!(Contact,
       %{
-        project_id: create(:project).id,
+        project_id: project.id,
         email:      "lee@jarvo.io",
         first_name: "Lee",
         last_name:  "Jarvis"
@@ -17,12 +17,11 @@ defmodule Simmer.Fixtures do
       params)
   end
 
-  def create(:list, params) do
-    project = create(:project)
+  def create(project, :list, params) do
     insert!(List, %{project_id: project.id, name: "Newsletter"}, params)
   end
 
-  def create(:project, params) do
+  def project(params \\ %{}) do
     insert!(Project, %{name: "Mailer"}, params)
   end
 

@@ -3,13 +3,15 @@ defmodule Simmer.ContactController do
 
   alias Simmer.Contact
 
+  # FIXME: scope SQL queries to projects
+
   def index(conn, _params) do
     contacts = Repo.all(Contact)
     render(conn, "contacts.json", contacts: contacts)
   end
 
   def create(conn, %{"contact" => contact_params}) do
-    changeset = Contact.changeset(%Contact{}, contact_params)
+    changeset = Contact.changeset(%Contact{}, conn.private.project, contact_params)
 
     case Repo.insert(changeset) do
       {:ok, contact} ->
@@ -30,8 +32,8 @@ defmodule Simmer.ContactController do
   end
 
   def update(conn, %{"email" => email, "contact" => contact_params}) do
-    contact = Repo.get_by!(Contact, email: email)
-    changeset = Contact.changeset(contact, contact_params)
+    contact = Repo.get_by!(Contact, email: email) |> Repo.preload(:project)
+    changeset = Contact.changeset(contact, conn.private.project, contact_params)
 
     case Repo.update(changeset) do
       {:ok, contact} ->

@@ -11,11 +11,11 @@ defmodule Simmer.ContactControllerTest do
     "last_name"  => "Jarvis",
   }
 
-  test "GET /contacts", %{conn: conn} do
-    conn = get(conn, contact_path(conn, :index))
-    assert json_response(conn, 200) == %{"contacts" => []}
+  test "GET /contacts", %{project: project, conn: conn} do
+    empty_conn = get(conn, contact_path(conn, :index))
+    assert json_response(empty_conn, 200) == %{"contacts" => []}
 
-    Fixtures.create(:contact)
+    Fixtures.create(project, :contact)
     conn = get(conn, contact_path(conn, :index))
     %{"contacts" => contacts} = json_response(conn, 200)
     assert Enum.count(contacts) == 1
@@ -30,7 +30,7 @@ defmodule Simmer.ContactControllerTest do
     end
 
     test "invalid payload", %{conn: conn} do
-      conn = post(build_conn(), contact_path(conn, :create, %{"contact" => %{"first_name" => "Lee"}}))
+      conn = post(conn, contact_path(conn, :create, %{"contact" => %{"first_name" => "Lee"}}))
 
       assert json_response(conn, :unprocessable_entity) == %{
         "errors" => %{"email" => ["can't be blank"]}
@@ -38,23 +38,23 @@ defmodule Simmer.ContactControllerTest do
     end
   end
 
-  test "GET /contacts/:email", %{conn: conn} do
-    contact  = Fixtures.create(:contact)
+  test "GET /contacts/:email", %{project: project, conn: conn} do
+    contact  = Fixtures.create(project, :contact)
     conn     = get(conn, contact_path(conn, :show, contact))
 
     assert json_response(conn, 200)["contact"]
   end
 
-  test "PATCH /contacts/:email", %{conn: conn} do
-    contact = Fixtures.create(:contact)
+  test "PATCH /contacts/:email", %{project: project, conn: conn} do
+    contact = Fixtures.create(project, :contact)
     conn    = put(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
 
     assert json_response(conn, 200)["first_name"] == "John"
     assert "John" == Repo.get!(Contact, contact.id).first_name
   end
 
-  test "DELETE /contacts/:email", %{conn: conn} do
-    contact = Fixtures.create(:contact)
+  test "DELETE /contacts/:email", %{project: project, conn: conn} do
+    contact = Fixtures.create(project, :contact)
     conn    = delete(conn, contact_path(conn, :delete, contact.email))
 
     assert response(conn, :no_content)

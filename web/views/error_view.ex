@@ -5,6 +5,10 @@ defmodule Simmer.ErrorView do
     %{errors: %{detail: "Page not found"}}
   end
 
+  def render("403.json", _assigns) do
+    %{errors: %{message: "Access forbidden"}}
+  end
+
   def render("500.json", _assigns) do
     %{errors: %{detail: "Internal server error"}}
   end

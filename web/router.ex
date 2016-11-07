@@ -2,6 +2,8 @@ defmodule Simmer.Router do
   use Simmer.Web, :router
 
   pipeline :api do
+    plug Simmer.Authorization
+
     plug :accepts, ["json"]
   end
 

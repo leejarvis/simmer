@@ -41,6 +41,14 @@ defmodule Simmer.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Simmer.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    project = Simmer.Fixtures.project
+    changes = Simmer.APIKey.changeset(%Simmer.APIKey{}, %{name: "testing"})
+              |> Ecto.Changeset.put_assoc(:project, project)
+    api_key = Simmer.Repo.insert!(changes)
+
+    conn = Phoenix.ConnTest.build_conn()
+           |> Plug.Conn.put_req_header("authorization", api_key.key)
+
+    {:ok, project: project, conn: conn}
   end
 end

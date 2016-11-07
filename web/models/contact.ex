@@ -17,9 +17,10 @@ defmodule Simmer.Contact do
   @required_params [:email]
   @optional_params [:first_name, :last_name]
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, project, params \\ %{}) do
     struct
     |> cast(params, @required_params ++ @optional_params)
+    |> put_assoc(:project, project)
     |> validate_required(@required_params)
   end
 end
