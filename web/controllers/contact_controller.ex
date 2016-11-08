@@ -34,7 +34,7 @@ defmodule Simmer.ContactController do
 
     case Repo.update(changeset) do
       {:ok, contact} ->
-        render(conn, "contact.json", contact: contact)
+        render(conn, "show.json", contact: contact)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
