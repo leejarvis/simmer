@@ -14,7 +14,6 @@ defmodule Simmer.ContactView do
       email:        contact.email,
       first_name:   contact.first_name,
       last_name:    contact.last_name,
-      inserted_at:  contact.inserted_at,
     }
   end
 end
