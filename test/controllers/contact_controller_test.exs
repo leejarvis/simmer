@@ -47,7 +47,7 @@ defmodule Simmer.ContactControllerTest do
 
   test "PATCH /contacts/:email", %{project: project, conn: conn} do
     contact = Fixtures.create(project, :contact)
-    conn    = put(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
+    conn    = patch(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
 
     assert json_response(conn, 200)["contact"]["first_name"] == "John"
     assert "John" == Repo.get!(Contact, contact.id).first_name
