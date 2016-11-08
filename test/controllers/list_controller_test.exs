@@ -20,4 +20,19 @@ defmodule Simmer.ListControllerTest do
 
     assert json_response(conn, 200)["list"]["name"] == list.name
   end
+
+  test "PATCH /list/:id", %{project: project, conn: conn} do
+    list = Fixtures.create(project, :list)
+    conn = patch(conn, list_path(conn, :update, list), %{"list" => %{"name" => "New name"}})
+
+    assert json_response(conn, 200)["list"]["name"] == "New name"
+  end
+
+  test "DELETE /list/:id", %{project: project, conn: conn} do
+    list = Fixtures.create(project, :list)
+    conn = delete(conn, list_path(conn, :delete, list))
+
+    assert response(conn, :no_content)
+    refute Repo.get(Simmer.List, list.id)
+  end
 end

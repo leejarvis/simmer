@@ -27,4 +27,23 @@ defmodule Simmer.ListController do
     list = get!(conn, List, id)
     render(conn, "show.json", list: list)
   end
+
+  def update(conn, %{"id" => id, "list" => list_params}) do
+    list      = get!(conn, List, id)
+    changeset = List.changeset(list, current_project(conn), list_params)
+
+    case Repo.update(changeset) do
+      {:ok, list} ->
+        render(conn, "show.json", list: list)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    get!(conn, List, id) |> Repo.delete!
+    send_resp(conn, :no_content, "")
+  end
 end
