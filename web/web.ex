@@ -38,6 +38,7 @@ defmodule Simmer.Web do
       import Simmer.Gettext
 
       import Simmer.CurrentProject
+      import Simmer.ErrorController
     end
   end
 

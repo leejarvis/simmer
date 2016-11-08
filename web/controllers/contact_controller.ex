@@ -16,10 +16,7 @@ defmodule Simmer.ContactController do
         |> put_resp_header("location", contact_path(conn, :show, contact))
         |> put_status(:created)
         |> render("contact.json", contact: contact)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+      {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 
@@ -35,10 +32,7 @@ defmodule Simmer.ContactController do
     case Repo.update(changeset) do
       {:ok, contact} ->
         render(conn, "show.json", contact: contact)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+      {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 

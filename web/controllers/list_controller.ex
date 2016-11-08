@@ -16,10 +16,7 @@ defmodule Simmer.ListController do
         |> put_resp_header("location", list_path(conn, :show, list))
         |> put_status(:created)
         |> render("list.json", list: list)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+      {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 
@@ -35,10 +32,7 @@ defmodule Simmer.ListController do
     case Repo.update(changeset) do
       {:ok, list} ->
         render(conn, "show.json", list: list)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+      {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 
