@@ -38,4 +38,17 @@ defmodule Simmer.CurrentProject do
     Repo.get_by!(struct, params)
     |> Repo.preload(:project)
   end
+
+  @doc """
+  Helper function for implementing `Repo.get!/2` except scoped
+  to the current project. The project will also be preloaded, so
+  it expects `struct` to `belong_to` project.
+
+  ## Examples:
+
+      get!(conn, List, 123)
+  """
+  def get!(conn, struct, id) do
+    get_by!(conn, struct, id: id)
+  end
 end

@@ -13,9 +13,10 @@ defmodule Simmer.List do
   @required_params [:name]
   @optional_params []
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, project, params \\ %{}) do
     struct
     |> cast(params, @required_params ++ @optional_params)
+    |> put_assoc(:project, project)
     |> validate_required(@required_params)
   end
 end
