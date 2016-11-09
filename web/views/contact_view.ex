@@ -11,9 +11,10 @@ defmodule Simmer.ContactView do
 
   def render("contact.json", %{contact: contact}) do
     %{
-      email:        contact.email,
-      first_name:   contact.first_name,
-      last_name:    contact.last_name,
+      email:              contact.email,
+      first_name:         contact.first_name,
+      last_name:          contact.last_name,
+      additional_fields:  contact.additional_fields,
     }
   end
 end

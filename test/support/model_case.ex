@@ -61,7 +61,10 @@ defmodule Simmer.ModelCase do
       true
   """
   def errors_on(struct, data) do
-    struct.__struct__.changeset(struct, data)
+    errors_on(struct.__struct__.changeset(struct, data))
+  end
+  def errors_on(%Ecto.Changeset{} = changeset) do
+    changeset
     |> Ecto.Changeset.traverse_errors(&Simmer.ErrorHelpers.translate_error/1)
     |> Enum.flat_map(fn {key, errors} -> for msg <- errors, do: {key, msg} end)
   end
