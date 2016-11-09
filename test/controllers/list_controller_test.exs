@@ -3,12 +3,12 @@ defmodule Simmer.ListControllerTest do
 
   test "GET /lists", %{conn: conn} do
     conn = get(conn, list_path(conn, :index))
-    assert json_response(conn, 200) == %{"lists" => []}
+    assert json_response(conn, 200)["data"] == []
   end
 
   test "POST /lists", %{project: project, conn: conn} do
     conn = post(conn, list_path(conn, :create), %{list: %{name: "Newsletter"}})
-    assert json_response(conn, 201) == %{"name" => "Newsletter"}
+    assert json_response(conn, 201)["data"]["attributes"]["name"] == "Newsletter"
 
     project = Repo.preload(project, :lists)
     assert Enum.at(project.lists, 0).name == "Newsletter"
@@ -18,14 +18,14 @@ defmodule Simmer.ListControllerTest do
     list = Fixtures.create(project, :list)
     conn = get(conn, list_path(conn, :show, list))
 
-    assert json_response(conn, 200)["list"]["name"] == list.name
+    assert json_response(conn, 200)["data"]["attributes"]["name"] == list.name
   end
 
   test "PATCH /list/:id", %{project: project, conn: conn} do
     list = Fixtures.create(project, :list)
     conn = patch(conn, list_path(conn, :update, list), %{"list" => %{"name" => "New name"}})
 
-    assert json_response(conn, 200)["list"]["name"] == "New name"
+    assert json_response(conn, 200)["data"]["attributes"]["name"] == "New name"
   end
 
   test "DELETE /list/:id", %{project: project, conn: conn} do

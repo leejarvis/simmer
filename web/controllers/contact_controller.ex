@@ -4,7 +4,7 @@ defmodule Simmer.ContactController do
   alias Simmer.Contact
 
   def index(conn, _params) do
-    render(conn, "contacts.json", contacts: current_project(conn, :contacts))
+    render(conn, data: current_project(conn, :contacts))
   end
 
   def create(conn, %{"contact" => contact_params}) do
@@ -15,14 +15,14 @@ defmodule Simmer.ContactController do
         conn
         |> put_resp_header("location", contact_path(conn, :show, contact))
         |> put_status(:created)
-        |> render("contact.json", contact: contact)
+        |> render(:show, data: contact)
       {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 
   def show(conn, %{"email" => email}) do
     contact = get_by!(conn, Contact, email: email)
-    render(conn, "show.json", contact: contact)
+    render(conn, data: contact)
   end
 
   def update(conn, %{"email" => email, "contact" => contact_params}) do
@@ -31,7 +31,7 @@ defmodule Simmer.ContactController do
 
     case Repo.update(changeset) do
       {:ok, contact} ->
-        render(conn, "show.json", contact: contact)
+        render(conn, :show, data: contact)
       {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end

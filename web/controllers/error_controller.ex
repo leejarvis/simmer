@@ -1,6 +1,6 @@
 defmodule Simmer.ErrorController do
   import Plug.Conn, only: [put_status: 2, halt: 1]
-  import Phoenix.Controller, only: [render: 4]
+  import Phoenix.Controller, only: [render: 3]
 
   @doc """
   Renders a 422 status passing the changeset to the error.json
@@ -16,7 +16,7 @@ defmodule Simmer.ErrorController do
   def unprocessable_entity(conn, changeset) do
     conn
     |> put_status(:unprocessable_entity)
-    |> render(Simmer.ChangesetView, "error.json", changeset: changeset)
+    |> render(:errors, data: changeset)
     |> halt
   end
 end

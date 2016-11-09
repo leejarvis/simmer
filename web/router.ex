@@ -4,7 +4,9 @@ defmodule Simmer.Router do
   pipeline :api do
     plug Simmer.Authorization
 
-    plug :accepts, ["json"]
+    plug :accepts, ["json-api"]
+    plug JaSerializer.ContentTypeNegotiation
+    plug JaSerializer.Deserializer
   end
 
   scope "/api", Simmer do

@@ -4,7 +4,7 @@ defmodule Simmer.ListController do
   alias Simmer.List
 
   def index(conn, _params) do
-    render(conn, "lists.json", lists: current_project(conn, :lists))
+    render(conn, data: current_project(conn, :lists))
   end
 
   def create(conn, %{"list" => list_params}) do
@@ -15,14 +15,14 @@ defmodule Simmer.ListController do
         conn
         |> put_resp_header("location", list_path(conn, :show, list))
         |> put_status(:created)
-        |> render("list.json", list: list)
+        |> render(:show, data: list)
       {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
     list = get!(conn, List, id)
-    render(conn, "show.json", list: list)
+    render(conn, data: list)
   end
 
   def update(conn, %{"id" => id, "list" => list_params}) do
@@ -31,7 +31,7 @@ defmodule Simmer.ListController do
 
     case Repo.update(changeset) do
       {:ok, list} ->
-        render(conn, "show.json", list: list)
+        render(conn, :show, data: list)
       {:error, changeset} -> unprocessable_entity(conn, changeset)
     end
   end

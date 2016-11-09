@@ -48,6 +48,8 @@ defmodule Simmer.ConnCase do
 
     conn = Phoenix.ConnTest.build_conn()
            |> Plug.Conn.put_req_header("authorization", api_key.key)
+           |> Plug.Conn.put_req_header("accept", "application/vnd.api+json")
+           |> Plug.Conn.put_req_header("content-type", "application/vnd.api+json")
 
     {:ok, project: project, conn: conn}
   end

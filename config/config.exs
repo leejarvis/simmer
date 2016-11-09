@@ -13,7 +13,7 @@ config :simmer,
 config :simmer, Simmer.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "EoJV5km5fj93TMx1gaVu2KZ0+YW4GdFQTja6XUrHjnGwPTfzjCgllZqSE3/X4948",
-  render_errors: [view: Simmer.ErrorView, accepts: ~w(json)],
+  render_errors: [view: Simmer.ErrorView, accepts: ~w(json json-api)],
   pubsub: [name: Simmer.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -25,3 +25,13 @@ config :logger, :console,
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
+
+config :phoenix, :format_encoders,
+  "json-api": Poison
+
+config :mime, :types, %{
+  "application/vnd.api+json" => ["json-api"]
+}
+
+config :ja_serializer,
+  key_format: :underscored

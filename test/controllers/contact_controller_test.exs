@@ -13,11 +13,11 @@ defmodule Simmer.ContactControllerTest do
 
   test "GET /contacts", %{project: project, conn: conn} do
     empty_conn = get(conn, contact_path(conn, :index))
-    assert json_response(empty_conn, 200) == %{"contacts" => []}
+    assert json_response(empty_conn, 200)["data"] == []
 
     Fixtures.create(project, :contact)
     conn = get(conn, contact_path(conn, :index))
-    %{"contacts" => contacts} = json_response(conn, 200)
+    %{"data" => contacts} = json_response(conn, 200)
     assert Enum.count(contacts) == 1
   end
 
@@ -33,7 +33,7 @@ defmodule Simmer.ContactControllerTest do
       conn = post(conn, contact_path(conn, :create, %{"contact" => %{"first_name" => "Lee"}}))
 
       assert json_response(conn, :unprocessable_entity) == %{
-        "errors" => %{"email" => ["can't be blank"]}
+        "errors" => [%{"detail" => "Email can't be blank", "source" => %{"pointer" => "/data/attributes/email"}, "title" => "can't be blank"}]
       }
     end
   end
@@ -42,14 +42,14 @@ defmodule Simmer.ContactControllerTest do
     contact  = Fixtures.create(project, :contact)
     conn     = get(conn, contact_path(conn, :show, contact))
 
-    assert json_response(conn, 200)["contact"]
+    assert json_response(conn, 200)["data"]
   end
 
   test "PATCH /contacts/:email", %{project: project, conn: conn} do
     contact = Fixtures.create(project, :contact)
     conn    = patch(conn, contact_path(conn, :update, contact), %{"contact" => %{"first_name" => "John"}})
 
-    assert json_response(conn, 200)["contact"]["first_name"] == "John"
+    assert json_response(conn, 200)["data"]["attributes"]["first_name"] == "John"
     assert "John" == Repo.get!(Contact, contact.id).first_name
   end
 

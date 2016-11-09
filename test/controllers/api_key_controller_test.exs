@@ -6,6 +6,6 @@ defmodule Simmer.APIKeyControllerTest do
     keys = Repo.preload(project, :api_keys).api_keys
            |> Enum.map(fn k -> %{"key" => k.key, "name" => k.name} end)
 
-    assert json_response(conn, 200) == %{"api_keys" => keys}
+    assert keys == Enum.map(json_response(conn, 200)["data"], &(&1["attributes"]))
   end
 end
